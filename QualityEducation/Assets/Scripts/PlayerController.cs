@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
 
     private float jumpTimeCounter;
     public float jumpTime;
-    
+
+    public float ladderSpeed = 2f;
 
     private void Start()
     {
@@ -73,9 +74,29 @@ public class PlayerController : MonoBehaviour
         {
             inAir = false;
         }
+
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ladder") && Input.GetKey(KeyCode.D))
+        {
+            
+            rb.gravityScale = -1;
+            rb.AddForce(Vector2.up * ladderSpeed);
+            
 
+        }
+    }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ladder")){
+            rb.gravityScale = 1;
+        }
+        
+    }
 
 }
+
+
