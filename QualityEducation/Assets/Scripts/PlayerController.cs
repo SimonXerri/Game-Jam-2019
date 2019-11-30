@@ -31,9 +31,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        float moveHor = Input.GetAxisRaw("Horizontal");
-
         // Horzontal Movement
+        float moveHor = Input.GetAxisRaw("Horizontal");
         if (moveHor != 0)
         {
             velocity.x = Mathf.MoveTowards(velocity.x, speed * moveHor, acceleration * Time.deltaTime);
@@ -48,6 +47,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // Vertical Movement
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
         
         if (isGrounded && Input.GetKeyDown(KeyCode.Space)) // 
@@ -84,8 +84,12 @@ public class PlayerController : MonoBehaviour
             
             rb.gravityScale = -1;
             rb.AddForce(Vector2.up * ladderSpeed);
-            
+        }
 
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+           gameObject.transform.SetPositionAndRotation(new Vector3(-38, -1, 0), new Quaternion());
+           
         }
     }
 
