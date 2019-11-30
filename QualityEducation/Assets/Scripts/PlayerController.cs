@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ladder") && Input.GetKey(KeyCode.D))
+        if (collision.gameObject.CompareTag("Ladder") && Input.GetKey(KeyCode.D) || collision.gameObject.CompareTag("Ladder") && Input.GetKey(KeyCode.A))
         {
             
             rb.gravityScale = -1;
@@ -96,7 +96,9 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ladder")){
+            
             rb.gravityScale = 1;
+            rb.AddForce(Vector2.down * 20);
         }
         
     }
