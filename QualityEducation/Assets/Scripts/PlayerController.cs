@@ -4,16 +4,33 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private Rigidbody2D rb;
 
     public float speed = 9;                         // Speed of player
     public float acceleration = 75;                 // Acceleration when starting to walk
     public float deceleration = 70;                 // Deceleration when slowing down
     private Vector3 velocity;                       // To store x and y velocity at the current update
 
+    public float jumpForce;
+    private bool isGrounded;
+    public bool inAir;
+
+    public Transform feetPos;
+    public float checkRadius;
+    public LayerMask whatIsGround;
+
+    private float jumpTimeCounter;
+    public float jumpTime;
+    
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
     void FixedUpdate()
     {
         float moveHor = Input.GetAxisRaw("Horizontal");
-        float moveVer = Input.GetAxisRaw("Jump");
 
         // Horzontal Movement
         if (moveHor != 0)
@@ -25,16 +42,36 @@ public class PlayerController : MonoBehaviour
             velocity.x = Mathf.MoveTowards(velocity.x, 0, deceleration * Time.deltaTime);
         }
 
-        // Vertical Movement
-        if (moveVer != 0)
+        rb.transform.Translate(velocity * Time.deltaTime);
+    }
+
+    private void Update()
+    {
+        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+        
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space)) // 
         {
-            velocity.y = Mathf.MoveTowards(velocity.y, speed * moveVer, acceleration * Time.deltaTime);
-        }
-        else
-        {
-            velocity.y = Mathf.MoveTowards(velocity.y, 0, deceleration * Time.deltaTime);
+            inAir = true;
+            jumpTimeCounter = jumpTime; // reseting
+            rb.velocity = Vector2.up * jumpForce;
         }
 
-        transform.Translate(velocity * Time.deltaTime);
+        if (inAir && Input.GetKey(KeyCode.Space))
+        {
+            if(jumpTimeCounter > 0)
+            {
+                rb.velocity = Vector2.up * jumpForce;
+                jumpTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                inAir = false;
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            inAir = false;
+        }
     }
 }
