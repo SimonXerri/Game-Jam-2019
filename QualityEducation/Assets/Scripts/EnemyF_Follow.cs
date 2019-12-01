@@ -28,12 +28,20 @@ public class EnemyF_Follow : StateMachineBehaviour
         movePosition = Vector2.MoveTowards(rb2D.position, rb2D_p.position, step);
         rb2D.MovePosition(movePosition);
 
-        if (!playerCollider.IsTouching(visionCollider))
+        if (visionCollider && !playerCollider.IsTouching(visionCollider))
         {
             animator.SetBool("seePlayer", false);
         }
 
-        //if ()
+        // Update face
+        if(rb2D.position.x - rb2D_p.position.x > 0)
+        {
+            animator.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else
+        {
+            animator.GetComponent<SpriteRenderer>().flipX = false;
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state

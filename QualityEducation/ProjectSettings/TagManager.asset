@@ -8,6 +8,8 @@ TagManager:
   - Ladder
   - Enemy
   - PowerUp
+  - Fall
+  - Stomper
   layers:
   - Default
   - TransparentFX
